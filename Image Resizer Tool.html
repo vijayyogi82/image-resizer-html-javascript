@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Image Resizer Tool</title>
+  <style>
+    /* CSS for the input and button elements */
+    input, button {
+      margin: 10px;
+      font-size: 1.2rem;
+      padding: 5px;
+    }
+    /* CSS for the image element */
+    #resized-image {
+      max-width: 500px;
+      max-height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image Resizer Tool</h1>
+  <input type="file" id="file-input">
+  <br>
+  <input type="number" id="width-input" placeholder="Width in pixels">
+  <input type="number" id="height-input" placeholder="Height in pixels">
+  <br>
+  <button id="resize-button">Resize Image</button>
+  <br>
+  <img id="resized-image">
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const widthInput = document.getElementById('width-input');
+    const heightInput = document.getElementById('height-input');
+    const resizeButton = document.getElementById('resize-button');
+    const resizedImage = document.getElementById('resized-image');
+
+    resizeButton.addEventListener('click', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = widthInput.value;
+          canvas.height = heightInput.value;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resizedImage.src = canvas.toDataURL();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
